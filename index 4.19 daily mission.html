@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <p class="a"> 현재 서울의 기온 : <span id="msg"></span>도</p>
+    <title>내일배움캠프를 시작하며</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Nanum+Pen+Script&display=swap');
+
+        * {
+            font-family: "Do Hyeon", sans-serif;
+        }
+
+        .a {
+            color: black;
+            background-color: transparent;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            margin: 3px 0px 0px 0px;
+
+        }
+
+        .mytitle {
+            height: 250px;
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            background-image: url('https://velog.velcdn.com/images/youngni-bbangni/post/ffc6eb41-b4fa-4269-8eff-157fde48b4f9/image.jpg');
+            background-position: center;
+            background-size: cover;
+
+        }
+
+        .mytitle>button {
+            width: 150px;
+            height: 50px;
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+
+            margin-top: 20px;
+        }
+
+        .mycards {
+            width: 800px;
+
+            margin: 30px auto 0px auto;
+
+        }
+
+        .mypostingbox {
+            width: 500px;
+            margin: 30px auto 0px auto;
+            padding: 20px;
+            box-shadow: 0px 0px 3px 0px hsl(132, 70%, 53%);
+        }
+
+        .mybtn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mybtn>button {
+            margin-right: 20px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            let url = "http://spartacodingclub.shop/sparta_api/weather/seoul";
+            fetch(url).then(res => res.json()).then(data => {
+                let temp = data['temp'];
+                $('#msg').text(temp);
+            })
+        })
+
+        $(document).ready(function () {
+        let url = "http://spartacodingclub.shop/sparta_api/seoulair";
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            let mise = data["RealtimeCityAir"]["row"][0]["IDEX_NM"];
+            $("#m").text(mise);
+            alert("서울의 미세먼지 농도는 " + mise + " 입니다.");
+          });
+      });
+
+      
+
+        function openclose() {
+            $('#postingbox').toggle();
+        }
+        function makeCard() {
+            let image = $('#image').val();
+            let title = $('#title').val();
+            let content = $('#content').val();
+            let data = $('#data').val();
+
+            let temp_html = ` 
+            <div class="col">
+                <div class="card h-100">
+                    <img src="${image}"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${title}</h5>
+                        <p class="card-text">${content}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">${data}</small>
+                    </div>
+                </div>
+            </div>`
+            $('#card').append(temp_html);
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="mytitle">
+        <h1>내일배움캠프를 시작하며</h1>
+        <button onclick="openclose()">오늘 기록하기</button>
+    </div>
+    <div class="mypostingbox" id="postingbox">
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="image" placeholder="오늘의 이미지">
+            <label for="floatingInput">오늘의 이미지</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="title" placeholder="오늘의 한마디">
+            <label for="floatingInput">오늘의 한마디</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="content" placeholder="오늘의 배움">
+            <label for="floatingInput">오늘의 배움</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="data" placeholder="오늘의 날짜">
+            <label for="floatingInput">오늘의 날짜</label>
+        </div>
+        <div class="mybtn">
+            <button onclick="makeCard()" type="button" class="btn btn-success">기록하기</button>
+            <button type="button" class="btn btn-outline-success">닫기</button>
+        </div>
+    </div>
+    <div class="mycards">
+        <div id="card" class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <img src="data:image/png;base64,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"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">하는만큼 알게된다</h5>
+                        <p class="card-text">Fetch</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">24.04.18</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="data:image/png;base64,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"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">일단 해보자</h5>
+                        <p class="card-text">JQuery</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">24.04.17</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="data:image/png;base64,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"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">힘내자 아자아자</h5>
+                        <p class="card-text">Javascript</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">24.04.16</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="data:image/png;base64,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"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">코딩의 시작</h5>
+                        <p class="card-text">HTML</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">24.04.15</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
